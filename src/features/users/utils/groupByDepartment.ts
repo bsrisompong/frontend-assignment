@@ -8,8 +8,10 @@ interface IDepartmentData {
   addressUser: Record<string, string>;
 }
 
-export const groupByDepartment = (users: IUser[]) => {
+export const groupByDepartment = (users?: IUser[]) => {
   const departmentData: Record<string, IDepartmentData> = {};
+
+  if (!users) return [];
 
   for (const user of users) {
     const dept = user?.company?.department || "Unknown";
