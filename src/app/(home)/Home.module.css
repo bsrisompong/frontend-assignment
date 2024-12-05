@@ -1,3 +1,10 @@
-.main-grid {
+.container {
+  @apply min-h-screen;
+  @apply flex items-center justify-items-center gap-16;
+  @apply p-8 pb-20 sm:p-20;
+  @apply font-[family-name:var(--font-geist-sans)];
+}
+
+.wrapper {
   @apply grid grid-cols-3 gap-8 w-full;
 }

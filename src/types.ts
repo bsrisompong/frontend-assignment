@@ -1,6 +1,6 @@
-export type ItemType = "Fruit" | "Vegetable";
+export type TItemType = "Fruit" | "Vegetable";
 
-export interface Item {
-  type: ItemType;
+export interface IItem {
+  type: TItemType;
   name: string;
 }

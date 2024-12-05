@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Column } from "@/components";
-import { Item, ItemType } from "@/types";
+import { IItem, TItemType } from "@/types";
 
 import classes from "./Home.module.css";
 
-// Initial items array
-const initialItems: Item[] = [
+const initialItems: IItem[] = [
   { type: "Fruit", name: "Apple" },
   { type: "Vegetable", name: "Broccoli" },
   { type: "Vegetable", name: "Mushroom" },
@@ -22,11 +21,14 @@ const initialItems: Item[] = [
 ];
 
 export default function Home() {
-  const [mainList, setMainList] = useState<Item[]>(initialItems);
-  const [fruits, setFruits] = useState<Item[]>([]);
-  const [vegetables, setVegetables] = useState<Item[]>([]);
+  const [mainList, setMainList] = useState<IItem[]>(initialItems);
+  const [fruits, setFruits] = useState<IItem[]>([]);
+  const [vegetables, setVegetables] = useState<IItem[]>([]);
 
-  const handleMainItemClick = (item: Item, index: number) => {
+  const timersRef = useRef<Record<string, NodeJS.Timeout>>({});
+  // console.log("🚧 - file: page.tsx:31 - timersRef:", timersRef.current);
+
+  const handleMainItemClick = (item: IItem, index: number) => {
     const newMainList = [...mainList];
     newMainList.splice(index, 1);
     setMainList(newMainList);
@@ -37,16 +39,21 @@ export default function Home() {
       setVegetables((prev) => [...prev, item]);
     }
 
-    setTimeout(() => {
+    timersRef.current[item.name] = setTimeout(() => {
       moveItemBack(item);
     }, 5000);
   };
 
   const handleCetegoryItemCLick = (
-    item: Item,
+    item: IItem,
     index: number,
-    type: ItemType
+    type: TItemType
   ) => {
+    if (timersRef.current[item.name]) {
+      clearTimeout(timersRef.current[item.name]);
+      delete timersRef.current[item.name];
+    }
+
     if (type === "Fruit") {
       const newFruits = [...fruits];
       newFruits.splice(index, 1);
@@ -60,7 +67,7 @@ export default function Home() {
     setMainList((prev) => [...prev, item]);
   };
 
-  const moveItemBack = (item: Item) => {
+  const moveItemBack = (item: IItem) => {
     if (item.type === "Fruit") {
       setFruits((prev) => prev.filter((i) => i.name !== item.name));
     } else {
@@ -68,11 +75,13 @@ export default function Home() {
     }
 
     setMainList((prev) => [...prev, item]);
+
+    delete timersRef.current[item.name];
   };
 
   return (
-    <div className="flex items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <div className={classes["main-grid"]}>
+    <div className={classes.container}>
+      <div className={classes.wrapper}>
         <Column
           title="Main List"
           items={mainList}
