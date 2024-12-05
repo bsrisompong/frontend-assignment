@@ -1,5 +1,5 @@
 import React from "react";
-import { IItem, TItemType } from "@/types";
+import { type IItem, type TItemType } from "@/features/todo";
 import Item from "@/components/Item";
 
 interface ColumnProps {
