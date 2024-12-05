@@ -51,6 +51,8 @@ export const groupByDepartment = (users: IUser[]) => {
       // count hair colors of users in the department
       const hairColor = user.hair.color;
       deptEntry.hair[hairColor] = (deptEntry.hair[hairColor] || 0) + 1;
+    } else {
+      deptEntry.hair["undefined"] = (deptEntry.hair["undefined"] || 0) + 1;
     }
 
     if (user?.firstName && user?.lastName && user?.address?.postalCode) {
